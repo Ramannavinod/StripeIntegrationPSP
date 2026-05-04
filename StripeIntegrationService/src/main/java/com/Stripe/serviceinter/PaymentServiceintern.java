@@ -9,4 +9,7 @@ import com.Stripe.pojo.CreatePayment;
 @Component
 public interface PaymentServiceintern {
 	ResponseEntity<String> CreatePaymentIntent(CreatePayment createPayment);
+	ResponseEntity<String>  getPaymentById(String id);
+	ResponseEntity<String>  expirePaymentById(String id);
+
 }

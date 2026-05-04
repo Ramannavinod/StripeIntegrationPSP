@@ -32,7 +32,13 @@ public class PaymentService implements PaymentServiceintern {
 	
 	@Value("${stripe.url}")
     private String url;	
-
+	
+	@Value("${stripe.url.get}")
+	private String geturl;
+	
+	@Value("${stripe.url.expire}")
+	private String expireurl;
+	
 	@Override
 	public ResponseEntity<String> CreatePaymentIntent(CreatePayment payment) {
 		log.info("Creating Payment Intent");
@@ -66,6 +72,38 @@ public class PaymentService implements PaymentServiceintern {
 		ResponseEntity<String> response=httpServiceengine.createpaymenet(httpreq);
 		 log.info("Stripe API response: {}", response.getBody());
 		return response;
+	}
+
+	@Override
+	public ResponseEntity<String> getPaymentById(String id) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		headers.setBearerAuth(secret);
+		HTTPReq req=HTTPReq.builder()
+				 .method(HttpMethod.GET)
+				 .url(geturl.replace("{id}", id))
+				 .headers(headers)
+				 .body("")
+				 .build();
+		ResponseEntity<String> response=httpServiceengine.createpaymenet(req);
+		 log.info("Stripe API response: {}", response.getBody());
+	    return response;
+	}
+
+	@Override
+	public ResponseEntity<String> expirePaymentById(String id) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		headers.setBearerAuth(secret);
+		HTTPReq req=HTTPReq.builder()
+				 .method(HttpMethod.POST)
+				 .url(expireurl.replace("{id}", id))
+				 .headers(headers)
+				 .body("")
+				 .build();
+		ResponseEntity<String> response=httpServiceengine.createpaymenet(req);
+		 log.info("Stripe API response: {}", response.getBody());
+	    return response;
 	}
 	
 
